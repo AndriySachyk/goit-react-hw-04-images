@@ -1,43 +1,41 @@
-import { Component } from "react";
+import {  useState } from "react";
 import { SearchbarHeader, SearchbarForm, SearchbarButton, SearchbarInput } from "./Searchbar-style"
 import PropTypes from 'prop-types';
 
 
-export class Searchbar extends Component   {
+export const Searchbar = ({handleSubmit}) => {
    
-    state = {
-    value:'',
+
+const [value, setValue] = useState('')
+    
+    
+const handleChange = ({ target : {name , value}}) => {
+  if (name === 'value') setValue(value)
+};
+
+
+    return(
+        <SearchbarHeader className="searchbar">
+            <SearchbarForm  onSubmit={handleSubmit}>
+                <SearchbarButton type="submit" className="button"></SearchbarButton>
+
+                <SearchbarInput
+                    className="input"
+                    name="value"
+                    type="text"
+                    autoComplete="off"
+                    autoFocus
+                    placeholder="Search images and photos"
+                    onChange={handleChange}
+                    value={value}
+                
+                />
+            </SearchbarForm>
+        </SearchbarHeader>
+    )
 }
-
-      handleChange = ({ target }) => {
-    this.setState({
-      [target.name]: target.value,
-    });
-  };
-
-    render() {
-        return(
-            <SearchbarHeader className="searchbar">
-                <SearchbarForm  onSubmit={this.props.handleSubmit}>
-                    <SearchbarButton type="submit" className="button"></SearchbarButton>
-     
-                    <SearchbarInput
-                        className="input"
-                        name="value"
-                        type="text"
-                        autoComplete="off"
-                        autoFocus
-                        placeholder="Search images and photos"
-                        onChange={this.handleChange}
-                        value={this.state.value}
-                  
-                    />
-                </SearchbarForm>
-            </SearchbarHeader>
-        )
-   }
    
-}
+
 
 
 Searchbar.propTypes = {
