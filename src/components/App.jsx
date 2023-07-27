@@ -61,11 +61,12 @@ const handleSubmit = (e) => {
 
   }
   // *==================/handleSubmit====================
-  
 
   useEffect(() => {
-    if (searchQuery) createImages()
-}, [searchQuery, ])
+    
+    if(searchQuery) createImages()
+  }, [searchQuery])
+
 
 
 // *==================createImages====================
