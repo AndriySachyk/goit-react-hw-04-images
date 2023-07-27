@@ -57,7 +57,7 @@ const handleSubmit = (e) => {
     Notiflix.Notify.warning('The request for this value has already been processed, please enter another value');
     return
   }
-  setSearchQuery(value)
+  setSearchQuery(value|| ' ')
 
   }
   // *==================/handleSubmit====================
@@ -65,7 +65,7 @@ const handleSubmit = (e) => {
   useEffect(() => {
     
     if(searchQuery) createImages()
-  }, [searchQuery])
+  },[searchQuery])
 
 
 
@@ -76,11 +76,12 @@ const createImages = async () => {
       try {
   
   
-        if (!searchQuery) {
+        if (searchQuery === ' ') {
+          console.log('hella')
+          setStatus(STATUS.IDLE)
           Notiflix.Notify.warning('Please fill in this field');
          
           setImages([])
-          setStatus(STATUS.IDLE)
           return
         }
   
