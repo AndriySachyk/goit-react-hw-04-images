@@ -72,7 +72,6 @@ const handleSubmit = (e) => {
 // *==================createImages====================
 const createImages = async () => {
       setStatus(STATUS.PENDING)
-        // console.log(searchQuery)
       try {
   
   
