@@ -28,20 +28,10 @@ const galleryImages = new GalleryImages();
 
 export const App = ()=> {
   
-  // state = {
-  //   images: [],
-  //   searchQuery: '',
-  //   status: STATUS.IDLE,
-  //   error: '',
-  //   numPage: 1,
-  //   modal: false,
-  //   modalImage: '',
-  //   // value:''
 
-  // }
 
 const [images, setImages] = useState([]);
-const [searchQuery, setSearchQuery] = useState('');
+const [searchQuery, setSearchQuery] = useState(null);
 const [status, setStatus] = useState(STATUS.IDLE);
 const [error, setError] = useState('');
 const [modal, setModal] = useState(false);
@@ -55,56 +45,56 @@ const handleSubmit = (e) => {
   const value = e.target[1].value.trim();
   if (searchQuery === value) {
     Notiflix.Notify.warning('The request for this value has already been processed, please enter another value');
+   
     return
   }
-  setSearchQuery(value|| ' ')
+  setSearchQuery(value)
 
-  }
-  // *==================/handleSubmit====================
+}
+// *==================/handleSubmit====================
 
-  useEffect(() => {
-    
-    if(searchQuery) createImages()
-  },[searchQuery])
+useEffect(() => {
+  // console.log(searchQuery)
+  if (searchQuery || searchQuery === '') createImages();
+  // eslint-disable-next-line
+},[searchQuery])
 
 
 
 // *==================createImages====================
 const createImages = async () => {
-      setStatus(STATUS.PENDING)
+  setStatus(STATUS.PENDING)
+   if (searchQuery === '' ) {
+    console.log('hella')
+    Notiflix.Notify.warning('Please fill in this field');
+           
+    setImages([])
+    setStatus(STATUS.IDLE)
+    return
+  }
       try {
-  
-  
-        if (searchQuery === ' ') {
-          console.log('hella')
-          setStatus(STATUS.IDLE)
-          Notiflix.Notify.warning('Please fill in this field');
-         
-          setImages([])
-          return
-        }
-  
-        const data = await galleryImages.getGallery(searchQuery)
-        // console.log(data)
-        if (data.hits.length === 0) {
-          setImages([]);
-          setStatus(STATUS.REJECTED)
-          
-          return Notiflix.Notify.failure(`Sorry, image ${searchQuery} not found`);
-        } 
+          const data = await galleryImages.getGallery(searchQuery)
+          // console.log(data)
+          if (data.hits.length === 0) {
+            setImages([]);
+            setStatus(STATUS.REJECTED)
+            
+            return Notiflix.Notify.failure(`Sorry, image ${searchQuery} not found`);
+          } 
         
-        setImages([...data.hits]);
-        setStatus(STATUS.FULFILLED)
+            setImages([...data.hits]);
+        setStatus(STATUS.FULFILLED);
         
         Notiflix.Notify.success(`Total: ${data.totalHits}`);
         const totalHits = Math.round(data.totalHits / galleryImages.perPage);
         const thisPage = galleryImages.page;
+        
         if (thisPage > totalHits) {
           Notiflix.Notify.failure(
             "We're sorry, but you've reached the end of search results."
           );
           setStatus(STATUS.IDLE)
-          return
+          return 
         }
       } catch (error) {
         setStatus(STATUS.REJECTED)
